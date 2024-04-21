@@ -1,52 +1,74 @@
-/* Styles for the entire popup, ensuring readability and visual appeal */
+/* Overall body and container adjustments for a cleaner look */
 body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    height: 100vh;
-    background-color: #f4f4f4;
+  font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f4f4f4;
 }
 
-#pet-container, #tabs-data-container {
-    width: 90%;
-    max-width: 600px;
-    margin-top: 20px;
-    background-color: #ffffff;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-    text-align: center;
+#pet-container {
+  text-align: center;
+  background-color: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
 }
 
-#tabs-list {
-    list-style: none;
-    width: 100%;
-    padding: 0;
-    margin-top: 10px;
+#pet-name {
+  font-size: 1.5em;
+  color: #333;
 }
 
-#tabs-list li {
-    padding: 10px;
-    background-color: #eeeeee;
-    margin-bottom: 5px;
-    border-radius: 5px;
-    text-align: left;
+#pet-image {
+  max-width: 100%;
+  height: auto;
+  margin: 10px 0;
 }
 
-/* Highlighting URLs and time spent for better visibility */
-#tabs-list li div {
-    font-size: 0.9em;
-    color: #333;
+#progress-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 10px 0;
 }
 
-#tabs-list li div.url {
-    font-weight: bold;
+progress {
+  width: 70%;
+  height: 20px;
+  margin-right: 10px;
 }
 
-#tabs-list li div.time {
-    color: #555;
-    font-style: italic;
+span#progress-value {
+  font-weight: bold;
+}
+
+button#settings {
+  padding: 10px 20px;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  margin-top: 10px;
+}
+
+/* Styles for tabs info */
+#tabs-info {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #eeeeee;
+  border-radius: 5px;
+  text-align: left;
+}
+
+#tabs-info div {
+  margin-bottom: 5px;
+}
+
+#tabs-info div:last-child {
+  margin-bottom: 0;
 }
