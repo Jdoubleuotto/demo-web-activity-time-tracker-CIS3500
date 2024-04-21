@@ -4,7 +4,7 @@
   "short_name": "Web Tracker",
   "version": "2.0.20",
   "description": "__MSG_extDescription__",
-  "options_page": "src/dashboard.html",
+  "options_page": "dashboard.html",
   "default_locale": "en",
   "icons": {
     "16": "16x16.png",
@@ -24,10 +24,10 @@
   ],
   "offline_enabled": true,
   "background": {
-    "service_worker": "src/background.ts"
+    "service_worker": "background.ts"
   },
   "action": {
-    "default_popup": "src/popup.html",
+    "default_popup": "popup.html",
     "default_title": "Web Activity Time Tracker"
   },
   "web_accessible_resources": [{
