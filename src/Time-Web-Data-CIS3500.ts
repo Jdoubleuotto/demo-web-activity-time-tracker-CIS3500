@@ -1,5 +1,6 @@
 // Import the necessary web extension polyfill
 import Browser from 'webextension-polyfill';
+import { StorageDeserializeParam as ExternalStorageDeserializeParam } from './storage/storage-params';
 
 // Define the Tab entity with necessary properties
 class Tab {
