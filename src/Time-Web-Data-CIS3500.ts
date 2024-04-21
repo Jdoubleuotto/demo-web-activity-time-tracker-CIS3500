@@ -47,7 +47,7 @@ class LocalStorage implements IStorage {
 
   // Additional methods would be similar to saveTabs but for different data types
   async getTabsTimeAndUrl(): Promise<Array<{url: string, timeSpent: number}>> {
-    let tabsData = await this.getDeserializeList(StorageDeserializeParam.TABS);
+    let tabsData = await this.getDeserializeList('TABS');
     if (tabsData.length === 0) {
       console.log("No data available");
       return [];

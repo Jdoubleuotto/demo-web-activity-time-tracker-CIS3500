@@ -1,0 +1,75 @@
+/* Overall body and container adjustments for a cleaner look */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #f4f4f4;
+  }
+  
+  #pet-container {
+    text-align: center;
+    background-color: white;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+  }
+  
+  #pet-name {
+    font-size: 1.5em;
+    color: #333;
+  }
+  
+  #pet-image {
+    max-width: 100%;
+    height: auto;
+    margin: 10px 0;
+  }
+  
+  #progress-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+  }
+  
+  progress {
+    width: 70%;
+    height: 20px;
+    margin-right: 10px;
+  }
+  
+  span#progress-value {
+    font-weight: bold;
+  }
+  
+  button#settings {
+    padding: 10px 20px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+  }
+  
+  /* Styles for tabs info */
+  #tabs-info {
+    margin-top: 20px;
+    padding: 10px;
+    background-color: #eeeeee;
+    border-radius: 5px;
+    text-align: left;
+  }
+  
+  #tabs-info div {
+    margin-bottom: 5px;
+  }
+  
+  #tabs-info div:last-child {
+    margin-bottom: 0;
+  }
+  
