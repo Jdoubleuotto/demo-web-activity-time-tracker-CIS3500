@@ -1,49 +1,57 @@
-// Assuming necessary imports and class definitions for LocalStorage are already integrated
+document.addEventListener('DOMContentLoaded', function() {
+    // Function to display tabs data in the popup
+    function displayTabs(tabs) {
+        const container = document.getElementById('tabs-list');
+        container.innerHTML = ''; // Clear existing entries
 
-// Instantiate the LocalStorage to use for fetching the data
-const storage = new LocalStorage();
+        if (tabs && tabs.length > 0) {
+            tabs.forEach(tab => {
+                const tabElement = document.createElement('div');
+                tabElement.textContent = `URL: ${tab.url}, Time Spent: ${tab.timeSpent} seconds`;
+                container.appendChild(tabElement);
+            });
+        } else {
+            container.textContent = 'No tabs data found.';
+        }
+    }
 
-// Function to render tabs data from local storage directly
-function renderTabsData(tabsData) {
-  const tabsListElement = document.getElementById('tabs-list');
-  tabsListElement.innerHTML = ''; // Clear current list
-
-  if (tabsData && tabsData.length > 0) {
-    // Create list items for each tab's data and append them to the list
-    tabsData.forEach(tab => {
-      const listItem = document.createElement('li');
-      listItem.textContent = `URL: ${tab.url}, Time Spent: ${tab.timeSpent} seconds`;
-      tabsListElement.appendChild(listItem);
+    // Fetch and display tabs data from local storage when the popup loads
+    chrome.storage.local.get(['tabs'], function(result) {
+        if (result.tabs) {
+            displayTabs(result.tabs);
+        } else {
+            console.log('No tabs data found.');
+        }
     });
-  } else {
-    tabsListElement.textContent = "No data available";
-  }
-}
 
-// Function to handle message responses for tab data
-function handleTabDataMessage(response) {
-  if (response && response.tabs) {
-    renderTabsData(response.tabs);
-  } else {
-    console.error("No tab data received.");
-  }
-}
-
-// Combined DOMContentLoaded listener
-document.addEventListener('DOMContentLoaded', () => {
-  // Fetch and render tabs data on popup load directly from LocalStorage
-  storage.getTabsTimeAndUrl().then(renderTabsData);
-
-  // Optionally request tab data via messaging from the background script
-  chrome.runtime.sendMessage({action: "getTabsData"}, handleTabDataMessage);
+    // Listen for changes in storage to update the popup display in real time
+    chrome.storage.onChanged.addListener(function(changes, namespace) {
+        for (let key in changes) {
+            if (key === 'tabs' && namespace === 'local') {
+                displayTabs(changes[key].newValue);
+            }
+        }
+    });
 });
 
-// This part of the code would be in your background script
-chrome.runtime.onMessage.addListener(function(request, sender, sendResponse) {
-  if (request.action === "getTabsData") {
-    storage.getTabsTimeAndUrl().then(tabs => {
-      sendResponse({tabs: tabs});
+function displayTabs(tabs) {
+    const container = document.getElementById('tabs-list');
+    container.innerHTML = ''; // Clear previous entries
+
+    tabs.forEach(tab => {
+        const li = document.createElement('li');
+        const urlDiv = document.createElement('div');
+        const timeDiv = document.createElement('div');
+        
+        urlDiv.textContent = `URL: ${tab.url}`;
+        timeDiv.textContent = `Time Spent: ${tab.timeSpent} seconds`;
+
+        urlDiv.classList.add('url');
+        timeDiv.classList.add('time');
+
+        li.appendChild(urlDiv);
+        li.appendChild(timeDiv);
+        container.appendChild(li);
     });
-    return true; // Indicate that the response is async
-  }
-});
+}
+
