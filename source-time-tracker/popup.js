@@ -14,18 +14,17 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
-document.addEventListener('DOMContentLoaded', function() {
-    const tabsList = document.getElementById('tabs-list');
+chrome.tabs.onActivated.addListener(function(activeInfo) {
+    curTabID = activeInfo.tabId;  // Set the current tab ID based on the activated tab
+    chrome.tabs.get(activeInfo.tabId, function(tab) {
+        curWinID = tab.windowId;  // Set the window ID from the tab details
 
-    // Query all tabs and display them
-    chrome.tabs.query({}, function(tabs) {
-        tabs.forEach(tab => {
-            const tabElement = document.createElement('div');
-            tabElement.textContent = `${tab.title} - ${tab.url}`;
-            tabsList.appendChild(tabElement);
-        });
+        // Logging the current tab ID and window ID to the console for debugging
+        console.log("Current Tab ID: " + curTabID);
+        console.log("Current Window ID: " + curWinID);
     });
 });
+
 
 // document.addEventListener('DOMContentLoaded', function() {
 //     const tabsList = document.getElementById('tabs-list');
