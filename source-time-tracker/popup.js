@@ -14,6 +14,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 
+document.addEventListener('DOMContentLoaded', function() {
+    const tabsList = document.getElementById('tabs-list');
+
+    // Query all tabs and display them
+    chrome.tabs.query({}, function(tabs) {
+        tabs.forEach(tab => {
+            const tabElement = document.createElement('div');
+            tabElement.textContent = `${tab.title} - ${tab.url}`;
+            tabsList.appendChild(tabElement);
+        });
+    });
+});
+
 // document.addEventListener('DOMContentLoaded', function() {
 //     const tabsList = document.getElementById('tabs-list');
 
