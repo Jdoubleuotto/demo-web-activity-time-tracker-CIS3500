@@ -1,5 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const infoDiv = document.getElementById('infoDiv');
+    const infoDiv = document.getElementById('tabInfo');
     const printButton = document.getElementById('printButton');
     const visitedUrlsDiv = document.getElementById('visitedUrlsList'); // Get the div for visited URLs
 
