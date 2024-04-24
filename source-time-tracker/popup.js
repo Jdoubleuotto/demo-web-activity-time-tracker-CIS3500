@@ -22,3 +22,23 @@ document.addEventListener('DOMContentLoaded', function() {
     window.print();
   });
 });
+
+document.addEventListener('DOMContentLoaded', function() {
+    const displayButton = document.createElement('button');
+    displayButton.textContent = "Show Unique URLs";
+    document.body.appendChild(displayButton);
+    const urlsContainer = document.createElement('div');
+    document.body.appendChild(urlsContainer);
+
+    displayButton.addEventListener('click', () => {
+        chrome.runtime.sendMessage({type: "getUrls"}, function(response) {
+            urlsContainer.innerHTML = '';
+            response.urls.forEach(url => {
+                const urlElement = document.createElement('p');
+                urlElement.textContent = url;
+                urlsContainer.appendChild(urlElement);
+            });
+        });
+    });
+});
+
