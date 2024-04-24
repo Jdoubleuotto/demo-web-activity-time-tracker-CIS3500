@@ -3,43 +3,24 @@ import { injectTabsRepositorySingleton } from './repository/inject-tabs-reposito
 import { initTracker } from './tracker-updated';
 import { isValidPage } from './utils';
 
-// Initialize a Set to store unique URLs and the tracker
+// Initialize tab tracking and unique URLs storage
 const uniqueUrls = new Set();
 initTracker();
 
-// Function to add URLs to the Set
+// Add URL to the unique URLs Set if valid and not already present
 function addUniqueUrl(url) {
-    if (url && !url.startsWith('chrome://')) {
+    if (url && !url.startsWith('chrome://') && !uniqueUrls.has(url)) {
         uniqueUrls.add(url);
         console.log(`URL added: ${url}`);
     }
 }
 
-// Listen for tabs being updated to catch complete URLs
-chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-    if (changeInfo.status === 'complete') {
-        addUniqueUrl(tab.url);
-    }
-});
-
-// Listen for new tabs being activated to add their URL to the Set
-chrome.tabs.onActivated.addListener(activeInfo => {
-    chrome.tabs.get(activeInfo.tabId, (tab) => {
-        addUniqueUrl(tab.url);
-    });
-});
-
-// Handle messages from the popup to send back unique URLs
-chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
-    if (message.type === "getUrls") {
-        sendResponse({urls: Array.from(uniqueUrls)});
-    }
-    return true; // Indicate that we wish to send a response asynchronously
-});
-
-// Function to handle tab tracking
-async function trackTime() {
+// Track time spent on tabs and periodically save tab data
+async function trackTimeAndSave() {
     const repo = await injectTabsRepositorySingleton();
+    const storage = chrome.storage.local;
+
+    // Track time on the active tab if it's a valid page
     const window = await chrome.windows.getLastFocused({ populate: true });
     if (window.focused) {
         const activeTab = window.tabs.find(t => t.active);
@@ -49,19 +30,35 @@ async function trackTime() {
             if (!tab) {
                 tab = await repo.addTab(activeDomain);
             }
-            tab.updateTimeSpent(); // Assume this method tracks time spent on the tab
+            tab.updateTimeSpent();
             repo.saveTab(tab);
         }
     }
-}
 
-// Function to save tabs data periodically
-async function saveTabs() {
-    const storage = chrome.storage.local;
-    const repo = await injectTabsRepositorySingleton();
+    // Save the tabs data to local storage periodically
     const tabs = repo.getTabs();
-    await storage.set({tabs: tabs}); // Save the tabs data to local storage
+    await storage.set({ tabs: tabs });
 }
 
-// Schedule periodic saving of tabs data
-setInterval(saveTabs, 10000); // Save tabs data every 10 seconds
+// Event listeners for tab creation, update, and activation
+chrome.tabs.onCreated.addListener(tab => addUniqueUrl(tab.url));
+chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+    if (changeInfo.status === 'complete') {
+        addUniqueUrl(tab.url);
+    }
+});
+
+chrome.tabs.onActivated.addListener(activeInfo => {
+    chrome.tabs.get(activeInfo.tabId, tab => addUniqueUrl(tab.url));
+});
+
+// Respond to messages from the popup requesting unique URLs
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === "getUrls") {
+        sendResponse({ urls: Array.from(uniqueUrls) });
+    }
+    return true;  // Indicate asynchronous response
+});
+
+// Schedule periodic tracking and saving of tab data
+setInterval(trackTimeAndSave, 10000);  // Execute every 10 seconds
