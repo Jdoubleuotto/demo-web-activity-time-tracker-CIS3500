@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     chrome.storage.local.set({visitedUrls: visitedUrls}, function() {
                         console.log('Updated visited URLs:', visitedUrls);
                         displayVisitedUrls(visitedUrls); // Display visited URLs in the popup
+                        displayUrlTimes(visitedUrls);
                     });
                 });
             } else {
@@ -55,6 +56,8 @@ document.addEventListener('DOMContentLoaded', function() {
             urlTimes.innerHTML += `<p>URL: ${url}<br>Time Differences: ${differences.join(", ")} seconds</p>`;
         });
     }
+
+    
     
     function displayVisitedUrls(visitedUrls) {
         visitedUrlsDiv.innerHTML = '<h4>Visited URLs:</h4>';
