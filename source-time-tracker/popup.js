@@ -3,6 +3,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const printButton = document.getElementById('printButton');
     const visitedUrlsDiv = document.getElementById('visitedUrlsList'); // Get the div for displaying visited URLs
 
+    const urlTime = new Map();
+
     // Function to fetch and display current tab information and store it
     function updateTabInfo() {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
@@ -15,6 +17,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 chrome.storage.local.get({visitedUrls: []}, function(result) {
                     const visitedUrls = result.visitedUrls;
                     visitedUrls.push({title: currentTab.title, url: currentTab.url, time: new Date().toISOString()});
+                    urlTime.push([currentTab.url, 1]);
 
                     // Update the stored list
                     chrome.storage.local.set({visitedUrls: visitedUrls}, function() {
@@ -34,6 +37,8 @@ document.addEventListener('DOMContentLoaded', function() {
             visitedUrlsDiv.innerHTML += `<p>Title: ${urlInfo.title}<br>URL: ${urlInfo.url}<br>Time: ${urlInfo.time}</p>`;
         });
     }
+
+    console.table(urlTime);
 
     // Call updateTabInfo to populate info when popup is opened
     updateTabInfo();
