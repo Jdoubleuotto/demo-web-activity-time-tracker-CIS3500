@@ -17,7 +17,6 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Call updateTabInfo to populate info when popup is opened
   updateTabInfo();
-
   // Print the current tab info when the button is clicked
   printButton.addEventListener('click', function() {
     window.print();
