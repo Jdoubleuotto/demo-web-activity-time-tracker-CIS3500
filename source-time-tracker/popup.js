@@ -24,21 +24,25 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 document.addEventListener('DOMContentLoaded', function() {
-    const displayButton = document.createElement('button');
-    displayButton.textContent = "Show Unique URLs";
-    document.body.appendChild(displayButton);
     const urlsContainer = document.createElement('div');
     document.body.appendChild(urlsContainer);
 
-    displayButton.addEventListener('click', () => {
-        chrome.runtime.sendMessage({type: "getUrls"}, function(response) {
-            urlsContainer.innerHTML = '';
-            response.urls.forEach(url => {
-                const urlElement = document.createElement('p');
-                urlElement.textContent = url;
-                urlsContainer.appendChild(urlElement);
-            });
-        });
+    // Immediately fetch and display unique URLs when the popup loads
+    chrome.runtime.sendMessage({type: "getUrls"}, function(response) {
+        if (response && response.urls) {
+            if (response.urls.length > 0) {
+                response.urls.forEach(url => {
+                    const urlElement = document.createElement('p');
+                    urlElement.textContent = url;
+                    urlsContainer.appendChild(urlElement);
+                });
+            } else {
+                urlsContainer.textContent = 'No unique URLs tracked in this session.';
+            }
+        } else {
+            urlsContainer.textContent = 'Failed to retrieve URLs or no URLs present.';
+        }
     });
 });
+
 
