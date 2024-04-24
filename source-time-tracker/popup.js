@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (currentTab) {
         infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
         vistedUrls.push(currentTab.url);
-        console.log(vistedUrls.length)
+        console.table(fruits);
       } else {
         infoDiv.textContent = 'No active tab found.';
       }
