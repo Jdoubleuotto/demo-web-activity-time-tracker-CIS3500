@@ -1,7 +1,8 @@
+const visitedUrl = [];  // Corrected variable name from 'vistedUrl' to 'visitedUrl'
+
 document.addEventListener('DOMContentLoaded', function() {
   const infoDiv = document.getElementById('tabInfo');
   const printButton = document.getElementById('printButton');
-  const visitedUrl = [];  // Corrected variable name from 'vistedUrl' to 'visitedUrl'
 
   // Function to fetch and display current tab information
   function updateTabInfo() {
