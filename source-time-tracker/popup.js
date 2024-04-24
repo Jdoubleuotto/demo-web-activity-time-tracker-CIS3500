@@ -36,7 +36,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Populate the map with time differences between visits
         visitedUrls.forEach((urlInfo, index) => {
             if (!urlMap.has(urlInfo.url)) {
-                urlMap.set(urlInfo.url, 0);
+                urlMap.set(urlInfo.url, []);
             }
             if (index < visitedUrls.length - 1) {
                 const nextVisitTime = new Date(visitedUrls[index + 1].time);
@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         // Format the display of URLs and their time differences
         urlTimes.innerHTML = '<h4>Visited URLs with Time Differences:</h4>';
-        urlMap.forEach((url, differences) => {
+        urlMap.forEach((differences, url) => {
             urlTimes.innerHTML += `<p>URL: ${url}<br>Time Differences: ${differences} </p>`;
         });
     }
