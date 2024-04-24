@@ -2,6 +2,7 @@ document.addEventListener('DOMContentLoaded', function() {
   const infoDiv = document.getElementById('tabInfo');
   const urlsDiv = document.getElementById('urlsList');
   const printButton = document.getElementById('printButton');
+  let visitedUrls = []; // Array to store the visited URLs
 
   // Function to fetch and display current tab information
   function updateTabInfo() {
@@ -19,26 +20,33 @@ document.addEventListener('DOMContentLoaded', function() {
   function updateURLs() {
     chrome.runtime.sendMessage({type: "getUrls"}, function(response) {
       if (response && response.urls) {
-        if (response.urls.length > 0) {
-          response.urls.forEach(url => {
-            const urlElement = document.createElement('p');
-            urlElement.textContent = url;
-            urlsDiv.appendChild(urlElement);
-          });
-        } else {
-          urlsDiv.textContent = 'No unique URLs tracked in this session.';
-        }
+        visitedUrls = response.urls; // Store the URLs in the visitedUrls array
+        displayVisitedUrls(); // Call function to display URLs
       } else {
         urlsDiv.textContent = 'Failed to retrieve URLs or no URLs present.';
       }
     });
   }
 
+  // Function to display URLs from the visitedUrls array
+  function displayVisitedUrls() {
+    urlsDiv.innerHTML = ''; // Clear existing content
+    if (visitedUrls.length > 0) {
+      visitedUrls.forEach(url => {
+        const urlElement = document.createElement('p');
+        urlElement.textContent = url;
+        urlsDiv.appendChild(urlElement);
+      });
+    } else {
+      urlsDiv.textContent = 'No unique URLs tracked in this session.';
+    }
+  }
+
   // Populate info when popup is opened
   updateTabInfo();
   updateURLs();
 
-  // Print the current tab info when the button is clicked
+  // Print the current tab info along with visited URLs when the button is clicked
   printButton.addEventListener('click', function() {
     window.print();
   });
