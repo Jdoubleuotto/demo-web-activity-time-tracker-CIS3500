@@ -11,24 +11,48 @@ document.addEventListener('DOMContentLoaded', function() {
       if (currentTab) {
         infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
         vistedUrls.push(currentTab.url);
-        console.table(fruits);
+        console.log(vistedUrls)
       } else {
         infoDiv.textContent = 'No active tab found.';
       }
     });
   }
 
-  // Function to fetch and display all unique URLs
-  function updateURLs() {
-    chrome.runtime.sendMessage({type: "getUrls"}, function(response) {
-      if (response && response.urls) {
-        visitedUrls = response.urls; // Store the URLs in the visitedUrls array
-        displayVisitedUrls(); // Call function to display URLs
-      } else {
-        urlsDiv.textContent = 'Failed to retrieve URLs or no URLs present.';
+  chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+    if (changeInfo.status === 'complete') {
+        console.log(`Visited URL: ${tab.url}`);
       }
+  });
+
+chrome.tabs.onActivated.addListener(activeInfo => {
+    chrome.tabs.get(activeInfo.tabId, function(tab) {
+        console.log(`Switched to URL: ${tab.url}`);
+      });
+  });
+  chrome.webNavigation.onCompleted.addListener(function(details) {
+    chrome.tabs.get(details.tabId, function(tab) {
+        console.log(`Navigation completed to URL: ${tab.url}`);
+      });
+  });
+
+
+
+  // Function to update visited URLs
+function updateURLs() {
+    chrome.runtime.sendMessage({type: "getUrls"}, function(response) {
+        const urlsDiv = document.getElementById('urlsList');
+        urlsDiv.innerHTML = ''; // Clear previous entries
+        if (response && response.urls) {
+            response.urls.forEach(url => {
+                let urlElement = document.createElement('p');
+                urlElement.textContent = url;
+                urlsDiv.appendChild(urlElement);
+            });
+        } else {
+            urlsDiv.textContent = 'No unique URLs tracked in this session.';
+        }
     });
-  }
+}
 
   // Function to display URLs from the visitedUrls array
   function displayVisitedUrls() {
@@ -47,10 +71,9 @@ document.addEventListener('DOMContentLoaded', function() {
   // Populate info when popup is opened
   updateTabInfo();
   updateURLs();
-  displayVisitedUrls();
 
   // Print the current tab info along with visited URLs when the button is clicked
-  printButton.addEventListener('click', function() {
+  printButton.getElementById.addEventListener('click', function() {
     window.print();
   });
 });
