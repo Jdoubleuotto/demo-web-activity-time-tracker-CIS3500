@@ -69,10 +69,9 @@ function updateURLs() {
   // Populate info when popup is opened
   updateTabInfo();
   updateURLs();
-  displayVisitedUrls();
 
   // Print the current tab info along with visited URLs when the button is clicked
-  printButton.getElementById.addEventListener('click', function() {
+  printButton.addEventListener('click', function() {
     window.print();
   });
 });
