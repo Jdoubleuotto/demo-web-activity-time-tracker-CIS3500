@@ -1,10 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
   const infoDiv = document.getElementById('tabInfo');
-  const urlsDiv = document.getElementById('urlsList');
   const printButton = document.getElementById('printButton');
-  let visitedUrls = []; // Array to store the visited URLs
+  const urlsDiv = document.getElementById('urlsList');
 
-  Function to fetch and display current tab information
+  // Function to fetch and display current tab information
   function updateTabInfo() {
     chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
       let currentTab = tabs[0];
@@ -15,27 +14,7 @@ document.addEventListener('DOMContentLoaded', function() {
       }
     });
   }
-
-//   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-//     if (changeInfo.status === 'complete') {
-//         console.log(`Visited URL: ${tab.url}`);
-//       }
-//   });
-
-// chrome.tabs.onActivated.addListener(activeInfo => {
-//     chrome.tabs.get(activeInfo.tabId, function(tab) {
-//         console.log(`Switched to URL: ${tab.url}`);
-//       });
-//   });
-//   chrome.webNavigation.onCompleted.addListener(function(details) {
-//     chrome.tabs.get(details.tabId, function(tab) {
-//         console.log(`Navigation completed to URL: ${tab.url}`);
-//       });
-//   });
-
-
-
-  // Function to update visited URLs
+    // Function to update visited URLs
 // function updateURLs() {
 //     chrome.runtime.sendMessage({type: "getUrls"}, function(response) {
 //         const urlsDiv = document.getElementById('urlsList');
@@ -66,11 +45,10 @@ document.addEventListener('DOMContentLoaded', function() {
 //     }
 //   }
 
-  // Populate info when popup is opened
+  // Call updateTabInfo to populate info when popup is opened
   updateTabInfo();
-  // updateURLs();
 
-  // Print the current tab info along with visited URLs when the button is clicked
+  // Print the current tab info when the button is clicked
   printButton.addEventListener('click', function() {
     window.print();
   });
