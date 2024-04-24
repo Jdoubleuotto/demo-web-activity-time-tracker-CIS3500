@@ -26,6 +26,13 @@ chrome.tabs.onActivated.addListener(activeInfo => {
     });
 });
 
+chrome.runtime.onMessage.addListener((message, sender, sendResponse) => {
+    if (message.type === "getUrls") {
+        sendResponse({urls: Array.from(uniqueUrls)});
+    }
+});
+
+
 // Example function to handle tab tracking
 async function trackTime() {
     const repo = await injectTabsRepositorySingleton();
