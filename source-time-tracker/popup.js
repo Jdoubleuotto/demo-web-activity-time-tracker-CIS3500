@@ -1,7 +1,7 @@
 document.addEventListener('DOMContentLoaded', function() {
   const infoDiv = document.getElementById('tabInfo');
   const printButton = document.getElementById('printButton');
-  const vistedUrl = [];
+  const visitedUrl = [];  // Corrected variable name from 'vistedUrl' to 'visitedUrl'
 
   // Function to fetch and display current tab information
   function updateTabInfo() {
@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
       if (currentTab) {
         infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
         console.log(`Title: ${currentTab.title}\nURL: ${currentTab.url}`);
-        visitedUrl.push(`Title: ${currentTab.title}\nURL: ${currentTab.url}`);
+        visitedUrl.push(`Title: ${currentTab.title}\nURL: ${currentTab.url}`);  // Corrected variable name
       } else {
         infoDiv.textContent = 'No active tab found.';
       }
@@ -19,9 +19,12 @@ document.addEventListener('DOMContentLoaded', function() {
 
   // Call updateTabInfo to populate info when popup is opened
   updateTabInfo();
-  console.table(vistedUrl);
+
   // Print the current tab info when the button is clicked
   printButton.addEventListener('click', function() {
     window.print();
   });
+
+  // Print all visited URLs to the console
+  console.table(visitedUrl);  // Moved inside the click event to ensure it logs after some tabs have been collected
 });
