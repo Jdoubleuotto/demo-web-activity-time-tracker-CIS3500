@@ -4,17 +4,17 @@ document.addEventListener('DOMContentLoaded', function() {
   const printButton = document.getElementById('printButton');
   let visitedUrls = []; // Array to store the visited URLs
 
-  // Function to fetch and display current tab information
-  // function updateTabInfo() {
-  //   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-  //     let currentTab = tabs[0];
-  //     if (currentTab) {
-  //       infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
-  //     } else {
-  //       infoDiv.textContent = 'No active tab found.';
-  //     }
-  //   });
-  // }
+  Function to fetch and display current tab information
+  function updateTabInfo() {
+    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+      let currentTab = tabs[0];
+      if (currentTab) {
+        infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
+      } else {
+        infoDiv.textContent = 'No active tab found.';
+      }
+    });
+  }
 
 //   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
 //     if (changeInfo.status === 'complete') {
