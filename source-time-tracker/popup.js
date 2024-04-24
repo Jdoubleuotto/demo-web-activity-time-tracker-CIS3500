@@ -1,7 +1,10 @@
+import { LocalStorage } from './path/to/LocalStorage'; // Adjust path as necessary
+
 document.addEventListener('DOMContentLoaded', function() {
     const infoDiv = document.getElementById('tabInfo');
     const printButton = document.getElementById('printButton');
     const urlsDiv = document.getElementById('urlsList');
+    const storage = new LocalStorage();
     let visitedUrls = []; // Array to store visited URLs
 
     // Function to fetch and display current tab information
@@ -30,8 +33,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     // Function to display URLs from the visitedUrls array
-    function displayVisitedUrls() {
+    async function displayVisitedUrls() {
+        const visitedUrls = await storage.getValue('visitedUrls', []); // Fetch the stored URLs with a default empty array
         urlsDiv.innerHTML = ''; // Clear existing content
+
         if (visitedUrls.length > 0) {
             visitedUrls.forEach(url => {
                 const urlElement = document.createElement('p');
@@ -39,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 urlsDiv.appendChild(urlElement);
             });
         } else {
-            urlsDiv.textContent = 'No unique URLs tracked in this session.';
+            urlsDiv.textContent = 'No URLs visited in this session.';
         }
     }
 
