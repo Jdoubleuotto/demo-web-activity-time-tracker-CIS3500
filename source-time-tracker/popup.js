@@ -37,7 +37,7 @@ document.addEventListener('DOMContentLoaded', function() {
         // Populate the map with time differences between visits
         visitedUrls.forEach((urlInfo, index) => {
             if (!urlMap.has(urlInfo.url)) {
-                urlMap.set(urlInfo.url, 0);
+                urlMap.set(urlInfo.url, []);
             }
             if (index < visitedUrls.length - 1) {
                 const nextVisitTime = new Date(visitedUrls[index + 1].time);
