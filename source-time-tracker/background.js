@@ -2,25 +2,31 @@
 import { injectTabsRepositorySingleton } from './repository/inject-tabs-repository';
 import { initTracker } from './tracker-updated';
 import { isValidPage } from './utils';
+import { LocalStorage } from './storage/LocalStorage';  // Path might need adjustment
 
-// Initialize tab tracking and unique URLs storage
+// Initialize local storage and tab tracking
+const storage = new LocalStorage();
 const uniqueUrls = new Set();
 initTracker();
 
-// Add URL to the unique URLs Set if valid and not already present
+// Load unique URLs from storage on startup
+(async () => {
+    const storedUrls = await storage.getValue('uniqueUrls') || [];
+    storedUrls.forEach(url => uniqueUrls.add(url));
+})();
+
+// Function to add a URL to the unique URLs Set if valid and not already present
 function addUniqueUrl(url) {
     if (url && !url.startsWith('chrome://') && !uniqueUrls.has(url)) {
         uniqueUrls.add(url);
         console.log(`URL added: ${url}`);
+        storage.saveValue('uniqueUrls', Array.from(uniqueUrls));  // Save updated list to local storage
     }
 }
 
 // Track time spent on tabs and periodically save tab data
 async function trackTimeAndSave() {
     const repo = await injectTabsRepositorySingleton();
-    const storage = chrome.storage.local;
-
-    // Track time on the active tab if it's a valid page
     const window = await chrome.windows.getLastFocused({ populate: true });
     if (window.focused) {
         const activeTab = window.tabs.find(t => t.active);
@@ -30,14 +36,14 @@ async function trackTimeAndSave() {
             if (!tab) {
                 tab = await repo.addTab(activeDomain);
             }
-            tab.updateTimeSpent();
-            repo.saveTab(tab);
+            tab.updateTimeSpent(); // Update time tracking
+            repo.saveTab(tab);  // Save tab data through repository
         }
     }
 
-    // Save the tabs data to local storage periodically
+    // Optional: Save all tabs data to local storage periodically
     const tabs = repo.getTabs();
-    await storage.set({ tabs: tabs });
+    storage.saveValue('tabsData', tabs);
 }
 
 // Event listeners for tab creation, update, and activation
@@ -49,7 +55,11 @@ chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
 });
 
 chrome.tabs.onActivated.addListener(activeInfo => {
-    chrome.tabs.get(activeInfo.tabId, tab => addUniqueUrl(tab.url));
+    chrome.tabs.get(activeInfo.tabId, tab => {
+        if (tab.url) {
+            addUniqueUrl(tab.url);
+        }
+    });
 });
 
 // Respond to messages from the popup requesting unique URLs
