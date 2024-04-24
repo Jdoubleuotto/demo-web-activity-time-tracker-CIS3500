@@ -45,7 +45,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 // const parsedNext = nextVisitTime.slice(11,19)
                 // const parsedCurrent = currentVisitTime.slice(11,19)
                 const diffSeconds = (nextVisitTime - currentVisitTime) / 1000;
-                urlMap.get(urlInfo.url).push(urlMap.get(urlInfo.url) + diffSeconds);
+                urlMap.get(urlInfo.url).push(diffSeconds);
             }
         });
 
