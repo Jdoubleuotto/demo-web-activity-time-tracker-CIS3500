@@ -5,35 +5,33 @@ document.addEventListener('DOMContentLoaded', function() {
   let visitedUrls = []; // Array to store the visited URLs
 
   // Function to fetch and display current tab information
-  function updateTabInfo() {
-    chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-      let currentTab = tabs[0];
-      if (currentTab) {
-        infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
-        vistedUrls.push(currentTab.url);
-        console.log(vistedUrls)
-      } else {
-        infoDiv.textContent = 'No active tab found.';
-      }
-    });
-  }
+  // function updateTabInfo() {
+  //   chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+  //     let currentTab = tabs[0];
+  //     if (currentTab) {
+  //       infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
+  //     } else {
+  //       infoDiv.textContent = 'No active tab found.';
+  //     }
+  //   });
+  // }
 
-  chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
-    if (changeInfo.status === 'complete') {
-        console.log(`Visited URL: ${tab.url}`);
-      }
-  });
+//   chrome.tabs.onUpdated.addListener(function(tabId, changeInfo, tab) {
+//     if (changeInfo.status === 'complete') {
+//         console.log(`Visited URL: ${tab.url}`);
+//       }
+//   });
 
-chrome.tabs.onActivated.addListener(activeInfo => {
-    chrome.tabs.get(activeInfo.tabId, function(tab) {
-        console.log(`Switched to URL: ${tab.url}`);
-      });
-  });
-  chrome.webNavigation.onCompleted.addListener(function(details) {
-    chrome.tabs.get(details.tabId, function(tab) {
-        console.log(`Navigation completed to URL: ${tab.url}`);
-      });
-  });
+// chrome.tabs.onActivated.addListener(activeInfo => {
+//     chrome.tabs.get(activeInfo.tabId, function(tab) {
+//         console.log(`Switched to URL: ${tab.url}`);
+//       });
+//   });
+//   chrome.webNavigation.onCompleted.addListener(function(details) {
+//     chrome.tabs.get(details.tabId, function(tab) {
+//         console.log(`Navigation completed to URL: ${tab.url}`);
+//       });
+//   });
 
 
 
@@ -71,6 +69,7 @@ function updateURLs() {
   // Populate info when popup is opened
   updateTabInfo();
   updateURLs();
+  displayVisitedUrls();
 
   // Print the current tab info along with visited URLs when the button is clicked
   printButton.getElementById.addEventListener('click', function() {
