@@ -1,5 +1,5 @@
 // Import necessary components for tab tracking
-import { injectTabsRepositorySingleton } from './repository/inject-tabs-repository';
+import { injectTabsRepositorySingleton } from './repository';
 import { initTracker } from './tracker-updated';
 import { isValidPage } from './utils';
 import { LocalStorage } from './storage/LocalStorage';  // Path might need adjustment
