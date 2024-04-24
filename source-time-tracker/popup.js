@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 const currentVisitTime = new Date(urlInfo.time);
                 // const parsedNext = nextVisitTime.slice(11,19)
                 // const parsedCurrent = currentVisitTime.slice(11,19)
-                const diffSeconds = (nextVisitTime - currentVisitTime);
+                const diffSeconds = (nextVisitTime - currentVisitTime) / 1000;
                 urlMap.get(urlInfo.url).push(diffSeconds);
             }
         });
@@ -53,7 +53,6 @@ document.addEventListener('DOMContentLoaded', function() {
         urlTimes.innerHTML = '<h4>Visited URLs with Time Differences:</h4>';
         urlMap.forEach((differences, url) => {
             urlTimes.innerHTML += `<p>URL: ${url}<br>Time Differences: ${differences} </p>`;
-            urlTimes.innerHTML += `<p>URL: ${url}<br>Time Differences: ${differences.join(", ")} seconds</p>`;
         });
     }
 
