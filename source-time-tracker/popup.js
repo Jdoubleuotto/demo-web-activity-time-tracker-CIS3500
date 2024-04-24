@@ -10,6 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
       let currentTab = tabs[0];
       if (currentTab) {
         infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
+        vistedUrls.push(currentTab.url);
       } else {
         infoDiv.textContent = 'No active tab found.';
       }
@@ -45,6 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
   // Populate info when popup is opened
   updateTabInfo();
   updateURLs();
+  displayVisitedUrls();
 
   // Print the current tab info along with visited URLs when the button is clicked
   printButton.addEventListener('click', function() {
