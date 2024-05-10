@@ -48,7 +48,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function updateChromagotchiHealth(totalSeconds) {
-        const maxHealthTime = 1000000; // Maximum seconds that correspond to 100% health
+        const maxHealthTime = 1000; // Maximum seconds that correspond to 100% health
         let healthPercentage = (totalSeconds / maxHealthTime) * 100;
         healthBar.style.width = `${Math.max(100, healthPercentage)}%`;
         healthBar.textContent = `Health: ${Math.round(Math.max(100, healthPercentage))}%`;
