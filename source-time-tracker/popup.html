@@ -57,15 +57,15 @@
     <div class="header">Chromagotchi Health Tracker</div>
     <div class="section">
         <img id="dogImage" src="dog.png" alt="Chromagotchi">
-  
-    <div id="healthBar">
-        <div id="currentHealth">Health: 0%</div> <!-- Health bar for Chromagotchi -->
+    </div>
+    <div class="section health-bar">
+        <div class="health-status" id="healthBar" style="width: 50%;">Health: 50%</div>
     </div>
     <div class="section time-info">
-        Good Time Spent: <span class="time-data">686 seconds</span>
+        Good Time Spent: <span id="goodTimeSpent" class="time-data">0 seconds</span>
     </div>
     <div class="section time-info">
-        Bad Time Spent: <span class="time-data">1138 seconds</span>
+        Bad Time Spent: <span id="badTimeSpent" class="time-data">0 seconds</span>
     </div>
     <script src="popup.js"></script>
 </body>
