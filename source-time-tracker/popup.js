@@ -11,7 +11,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateTabInfo() {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             let currentTab = tabs[0];
-            if (currentTab && !currentTab.url.startsWith('chrome://')) {
+            if (currentTab) {
                 let parsedUrl = new URL(currentTab.url).hostname; // Parse and get the hostname
                 infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${parsedUrl}`;
 
@@ -60,12 +60,15 @@ document.addEventListener('DOMContentLoaded', function() {
         displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent);
     }
 
-    function updateChromagotchiHealth(totalSeconds) {
-        const maxHealthTime = 10000;
-        let healthPercentage = (totalSeconds / maxHealthTime) * 100;
-        healthBar.style.width = `${Math.min(100, healthPercentage)}%`;
-        healthBar.textContent = `Health: ${Math.round(Math.min(100, healthPercentage))}%`;
+    function updateChromagotchiHealth(goodTimeSpent, badTimeSpent) {
+        let baseHealth = 50;
+        let healthChange = (goodTimeSpent / 100) - (badTimeSpent / 100);
+        let currentHealth = Math.min(100, Math.max(0, baseHealth + healthChange));
+
+        healthBar.style.width = `${currentHealth}%`;
+        healthBar.textContent = `Health: ${Math.round(currentHealth)}%`;
     }
+    
 
     function displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent) {
         urlTimes.innerHTML = '<h4>Visited URLs with Total Time Spent:</h4>';
