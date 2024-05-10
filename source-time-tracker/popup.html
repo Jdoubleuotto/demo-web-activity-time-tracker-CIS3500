@@ -1,60 +1,72 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <title>Current Tab Info</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      margin: 8px;
-      background-color: purple; /* Set background color to purple */
-    }
-    #tabInfo, #urlTimes, #healthBar {
-      margin-top: 10px;
-    }
-    #healthBar {
-      width: 100%; /* Full width container for health bar */
-      height: 20px;
-      background-color: grey; /* Background of the health bar */
-      margin-top: 20px;
-      text-align: center;
-      color: white;
-    }
-    #currentHealth {
-      height: 100%;
-      background-color: green; /* Green health bar */
-      width: 0%; /* Initial width, will be set by JavaScript */
-    }
-    h2 {
-      margin-top: 20px;
-    }
-    img {
-      display: block; /* Ensure the image is a block to align properly */
-      margin-top: 20px;
-      max-width: 100%; /* Make sure the image is responsive */
-    }
-    .info-text {
-      font-size: 0.8em;
-      color: #ddd;
-      margin-top: 5px;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <title>Chromagotchi Health Tracker</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #6200EE;
+            color: white;
+            margin: 0;
+            padding: 10px;
+        }
+        .header {
+            background: #3700B3;
+            padding: 10px;
+            text-align: center;
+            font-size: 20px;
+        }
+        .section {
+            margin: 10px 0;
+            padding: 10px;
+            background: #BB86FC;
+            border-radius: 8px;
+        }
+        .health-bar {
+            background-color: #3700B3;
+            border-radius: 8px;
+            height: 20px;
+            width: 100%;
+            color: #6200EE;
+            text-align: center;
+            line-height: 20px; /* Align text vertically */
+        }
+        .health-status {
+            background-color: #03DAC5;
+            width: calc(var(--health-percentage, 0) * 1%);
+            height: 100%;
+            transition: width 0.5s ease;
+        }
+        #dogImage {
+            display: block;
+            width: 100%;
+            height: auto;
+            margin-top: 10px;
+        }
+        .time-info {
+            font-size: 16px;
+            font-weight: bold;
+        }
+        .time-data {
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-  <h1>Current Tab</h1>
-  <div id="tabInfo">Loading...</div>
-  <button id="printButton">Print Tab Info</button>
-
-  <h2>URL Visit Time Differences</h2>
-  <div id="urlTimes">Loading time differences...</div>
-  
-  <h2>Chromagotchi Health</h2>
-  <div id="healthBar">
-    <div id="currentHealth">Health: 0%</div> <!-- Health bar for Chromagotchi -->
-  </div>
-
-  <img id="dogImage" src="dog.png" alt="Cute dog"> <!-- Displaying the dog image -->
-
-  <script src="popup.js"></script>
+    <div class="header">Chromagotchi Health Tracker</div>
+    <div class="section">
+        <img id="dogImage" src="dog.png" alt="Chromagotchi">
+    </div>
+    <div class="section health-bar">
+        <div class="health-status" style="--health-percentage: 45;">Health: 45%</div>
+    </div>
+    <div class="section time-info">
+        Good Time Spent: <span class="time-data">686 seconds</span>
+    </div>
+    <div class="section time-info">
+        Bad Time Spent: <span class="time-data">1138 seconds</span>
+    </div>
+    <script src="popup.js"></script>
 </body>
 </html>
