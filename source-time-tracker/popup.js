@@ -70,8 +70,6 @@ document.addEventListener('DOMContentLoaded', function() {
     }
     
 
-    
-
     function displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent) {
         urlTimes.innerHTML = '<h4>Visited URLs with Total Time Spent:</h4>';
         urlMap.forEach((totalSeconds, url) => {
@@ -79,7 +77,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         urlTimes.innerHTML += `<p>Good Time Spent: ${Math.round(goodTimeSpent)} seconds</p>`;
         urlTimes.innerHTML += `<p>Bad Time Spent: ${Math.round(badTimeSpent)} seconds</p>`;
+        document.getElementById('goodTimeSpent').textContent = `${Math.round(goodTimeSpent)} seconds`;
+        document.getElementById('badTimeSpent').textContent = `${Math.round(badTimeSpent)} seconds`;
     }
+
 
     updateTabInfo();
 });
