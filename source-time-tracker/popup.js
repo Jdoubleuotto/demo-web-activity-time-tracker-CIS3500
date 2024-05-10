@@ -1,15 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const healthBar = document.getElementById('currentHealth');
     const infoDiv = document.getElementById('tabInfo');
+    const visitedUrlsDiv = document.getElementById('visitedUrlsList'); // Get the div for displaying visited URLs
+    const printButton = document.getElementById('printButton');
     const urlTimes = document.getElementById('urlTimes');
 
+    // Function to fetch and display current tab information and store it
     function updateTabInfo() {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             let currentTab = tabs[0];
-            if (currentTab && !currentTab.url.startsWith('chrome://')) {
-                let parsedUrl = parseUrl(currentTab.url);
+            if (currentTab) {
+                let parsedUrl = new URL(currentTab.url).hostname; // Parse and get the hostname
+                console.log(`Title: ${currentTab.title}\nURL: ${currentTab.url}`);
+                // Use chrome.storage.local to retrieve the current list of URLs
                 infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${parsedUrl}`;
-                
                 chrome.storage.local.get({visitedUrls: []}, function(result) {
                     const visitedUrls = result.visitedUrls;
                     visitedUrls.push({title: currentTab.title, url: parsedUrl, time: new Date().toISOString()});
@@ -23,6 +26,7 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     }
+
 
     function parseUrl(url) {
         let urlObject = new URL(url);
