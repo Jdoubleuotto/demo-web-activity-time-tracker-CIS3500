@@ -34,7 +34,6 @@
         }
         .health-status {
             background-color: #03DAC5;
-            width: calc(var(--health-percentage, 0) * 1%);
             height: 100%;
             transition: width 0.5s ease;
         }
@@ -52,24 +51,21 @@
             font-size: 14px;
         }
     </style>
-  </head>
-    <body>  
-      <div class="header">Chromagotchi Health Tracker</div>
-      <div class="section">
-          <img id="dogImage" src="dog.png" alt="Chromagotchi">
-      </div>
-  
-      <div class="section health-bar">
-          <div class="health-status" id="healthBar" style="width: 50%;">Health: 50%</div>
-      </div>
-    
-      <div id="time-info">
-         <div id="goodTimeSpent">0 seconds</div> <!-- Health bar for Chromagotchi -->
-      </div>
-    
-      <div id="time-info">
-         <div id="badTimeSpent">0 seconds</div> <!-- Health bar for Chromagotchi -->
-      </div>
-      <script src="popup.js"></script>
-  </body>
+</head>
+<body>
+    <div class="header">Chromagotchi Health Tracker</div>
+    <div class="section">
+        <img id="dogImage" src="dog.png" alt="Chromagotchi">
+    </div>
+    <div class="section health-bar">
+        <div class="health-status" id="healthBar">Health: 50%</div> <!-- Initial placeholder -->
+    </div>
+    <div class="section time-info">
+        Good Time Spent: <span id="goodTimeSpent" class="time-data">0 seconds</span> <!-- Initial placeholder -->
+    </div>
+    <div class="section time-info">
+        Bad Time Spent: <span id="badTimeSpent" class="time-data">0 seconds</span> <!-- Initial placeholder -->
+    </div>
+    <script src="popup.js"></script>
+</body>
 </html>
