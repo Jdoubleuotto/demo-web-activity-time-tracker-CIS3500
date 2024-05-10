@@ -1,26 +1,32 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const healthBar = document.getElementById('currentHealth'); // Ensure this ID matches the health bar div
+    const healthBar = document.getElementById('currentHealth');
     const infoDiv = document.getElementById('tabInfo');
     const urlTimes = document.getElementById('urlTimes');
 
     function updateTabInfo() {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             let currentTab = tabs[0];
-            if (currentTab) {
-                infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
+            if (currentTab && !currentTab.url.startsWith('chrome://')) {
+                let parsedUrl = parseUrl(currentTab.url);
+                infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${parsedUrl}`;
                 
                 chrome.storage.local.get({visitedUrls: []}, function(result) {
                     const visitedUrls = result.visitedUrls;
-                    visitedUrls.push({title: currentTab.title, url: currentTab.url, time: new Date().toISOString()});
+                    visitedUrls.push({title: currentTab.title, url: parsedUrl, time: new Date().toISOString()});
                     
                     chrome.storage.local.set({visitedUrls: visitedUrls}, function() {
                         displayUrlTimesAndUpdateHealth(visitedUrls);
                     });
                 });
             } else {
-                infoDiv.textContent = 'No active tab found.';
+                infoDiv.textContent = 'No active tab found or URL is not trackable.';
             }
         });
+    }
+
+    function parseUrl(url) {
+        let urlObject = new URL(url);
+        return urlObject.hostname; // Returns the domain name without path
     }
 
     function displayUrlTimesAndUpdateHealth(visitedUrls) {
@@ -42,16 +48,16 @@ document.addEventListener('DOMContentLoaded', function() {
         urlMap.forEach((time, url) => {
             totalSeconds += time;
         });
-        console.log(totalSeconds);
+
         updateChromagotchiHealth(totalSeconds);
         displayVisitedTimes(urlMap);
     }
 
     function updateChromagotchiHealth(totalSeconds) {
-        const maxHealthTime = 1000; // Maximum seconds that correspond to 100% health
+        const maxHealthTime = 1000000;
         let healthPercentage = (totalSeconds / maxHealthTime) * 100;
-        healthBar.style.width = `${Math.max(100, healthPercentage)}%`;
-        healthBar.textContent = `Health: ${Math.round(Math.max(100, healthPercentage))}%`;
+        healthBar.style.width = `${Math.min(100, healthPercentage)}%`;
+        healthBar.textContent = `Health: ${Math.round(Math.min(100, healthPercentage))}%`;
     }
 
     function displayVisitedTimes(urlMap) {
