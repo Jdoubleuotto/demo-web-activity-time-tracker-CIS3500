@@ -60,11 +60,13 @@ document.addEventListener('DOMContentLoaded', function() {
         displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent);
     }
 
-    function updateChromagotchiHealth(totalSeconds) {
-        const maxHealthTime = 10000;
-        let healthPercentage = (totalSeconds / maxHealthTime) * 100;
-        healthBar.style.width = `${Math.min(100, healthPercentage)}%`;
-        healthBar.textContent = `Health: ${Math.round(Math.min(100, healthPercentage))}%`;
+    ffunction updateChromagotchiHealth(goodTimeSpent, badTimeSpent) {
+        let baseHealth = 50;
+        let healthChange = (goodTimeSpent / 100) - (badTimeSpent / 100);
+        let currentHealth = Math.min(100, Math.max(0, baseHealth + healthChange));
+
+        healthBar.style.width = `${currentHealth}%`;
+        healthBar.textContent = `Health: ${Math.round(currentHealth)}%`;
     }
 
     function displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent) {
