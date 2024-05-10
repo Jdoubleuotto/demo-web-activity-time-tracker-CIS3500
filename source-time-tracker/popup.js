@@ -1,21 +1,18 @@
 document.addEventListener('DOMContentLoaded', function() {
-    const healthBar = document.getElementById('healthBar'); // Get the health bar for Chromagotchi
+    const healthBar = document.getElementById('currentHealth'); // Ensure this ID matches the health bar div
     const infoDiv = document.getElementById('tabInfo');
     const urlTimes = document.getElementById('urlTimes');
-    const dogImage = document.getElementById('dogImage'); // Get the image element for displaying the dog
-
-    document.body.style.backgroundColor = 'purple'; // Set the background color of the popup
 
     function updateTabInfo() {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             let currentTab = tabs[0];
             if (currentTab) {
                 infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${currentTab.url}`;
-
+                
                 chrome.storage.local.get({visitedUrls: []}, function(result) {
                     const visitedUrls = result.visitedUrls;
                     visitedUrls.push({title: currentTab.title, url: currentTab.url, time: new Date().toISOString()});
-
+                    
                     chrome.storage.local.set({visitedUrls: visitedUrls}, function() {
                         displayUrlTimesAndUpdateHealth(visitedUrls);
                     });
@@ -50,10 +47,11 @@ document.addEventListener('DOMContentLoaded', function() {
         displayVisitedTimes(urlMap);
     }
 
-    function updateChromagotchiHealth(seconds) {
-        let health = Math.min(100, seconds / 3600);
-        healthBar.style.width = `${health}%`;
-        healthBar.textContent = `Health: ${Math.round(health)}%`;
+    function updateChromagotchiHealth(totalSeconds) {
+        const maxHealthTime = 3600; // Maximum seconds that correspond to 100% health
+        let healthPercentage = Math.min(100, (totalSeconds / maxHealthTime) * 100);
+        healthBar.style.width = `${healthPercentage}%`;
+        healthBar.textContent = `Health: ${Math.round(healthPercentage)}%`;
     }
 
     function displayVisitedTimes(urlMap) {
@@ -62,9 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
             urlTimes.innerHTML += `<p>URL: ${url}<br>Total Time Spent: ${Math.round(totalSeconds)} seconds</p>`;
         });
     }
-
-    // Load the dog image
-    dogImage.src = 'dog.png'; // Set the source for the dog image
 
     updateTabInfo();
 });
