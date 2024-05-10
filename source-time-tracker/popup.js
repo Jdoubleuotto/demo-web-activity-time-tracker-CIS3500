@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateTabInfo() {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             let currentTab = tabs[0];
-            if (currentTab) {
+            if (currentTab && !currentTab.url.startsWith('chrome://')) {
                 let parsedUrl = new URL(currentTab.url).hostname; // Parse and get the hostname
                 console.log(`Title: ${currentTab.title}\nURL: ${currentTab.url}`);
                 // Use chrome.storage.local to retrieve the current list of URLs
