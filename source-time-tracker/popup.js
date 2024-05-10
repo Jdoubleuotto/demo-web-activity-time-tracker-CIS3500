@@ -42,7 +42,7 @@ document.addEventListener('DOMContentLoaded', function() {
         urlMap.forEach((time, url) => {
             totalSeconds += time;
         });
-
+        console.log(totalSeconds);
         updateChromagotchiHealth(totalSeconds);
         displayVisitedTimes(urlMap);
     }
@@ -50,8 +50,8 @@ document.addEventListener('DOMContentLoaded', function() {
     function updateChromagotchiHealth(totalSeconds) {
         const maxHealthTime = 1000000; // Maximum seconds that correspond to 100% health
         let healthPercentage = (totalSeconds / maxHealthTime) * 100;
-        healthBar.style.width = `${Math.min(100, healthPercentage)}%`;
-        healthBar.textContent = `Health: ${Math.round(Math.min(100, healthPercentage))}%`;
+        healthBar.style.width = `${Math.max(100, healthPercentage)}%`;
+        healthBar.textContent = `Health: ${Math.round(Math.max(100, healthPercentage))}%`;
     }
 
     function displayVisitedTimes(urlMap) {
