@@ -55,19 +55,21 @@ document.addEventListener('DOMContentLoaded', function() {
                 badTimeSpent += time;
             }
         });
-
-        updateChromagotchiHealth(totalSeconds);
+        updateChromagotchiHealth(goodTimeSpent, badTimeSpent);
         displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent);
     }
 
     function updateChromagotchiHealth(goodTimeSpent, badTimeSpent) {
         let baseHealth = 50;
-        let healthChange = (goodTimeSpent / 100) - (badTimeSpent / 100);
+        // Ensure that goodTimeSpent and badTimeSpent are numbers and divide by 100 to calculate the health change
+        let healthChange = Math.floor(goodTimeSpent / 100) - Math.floor(badTimeSpent / 100);
         let currentHealth = Math.min(100, Math.max(0, baseHealth + healthChange));
-
+    
         healthBar.style.width = `${currentHealth}%`;
         healthBar.textContent = `Health: ${Math.round(currentHealth)}%`;
     }
+    
+
     
 
     function displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent) {
