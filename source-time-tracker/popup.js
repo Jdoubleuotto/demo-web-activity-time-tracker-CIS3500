@@ -4,11 +4,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const printButton = document.getElementById('printButton');
     const urlTimes = document.getElementById('urlTimes');
 
+    const goodUrls = ['www.linkedin.com', 'www.tradingview.com']; // Array of good URLs
+    const badUrls = ['www.instagram.com', 'www.youtube.com']; // Array of bad URLs
+
     // Function to fetch and display current tab information and store it
     function updateTabInfo() {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             let currentTab = tabs[0];
-            if (currentTab && !currentTab.url.startsWith('chrome')) {
+            if (currentTab) {
                 let parsedUrl = new URL(currentTab.url).hostname; // Parse and get the hostname
                 console.log(`Title: ${currentTab.title}\nURL: ${currentTab.url}`);
                 // Use chrome.storage.local to retrieve the current list of URLs
@@ -51,10 +54,15 @@ document.addEventListener('DOMContentLoaded', function() {
 
         urlMap.forEach((time, url) => {
             totalSeconds += time;
+            if (goodUrls.includes(url)) {
+                goodTimeSpent += time;
+            } else if (badUrls.includes(url)) {
+                badTimeSpent += time;
+            }
         });
 
         updateChromagotchiHealth(totalSeconds);
-        displayVisitedTimes(urlMap);
+        displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent);
     }
 
     function updateChromagotchiHealth(totalSeconds) {
@@ -64,11 +72,13 @@ document.addEventListener('DOMContentLoaded', function() {
         healthBar.textContent = `Health: ${Math.round(Math.min(100, healthPercentage))}%`;
     }
 
-    function displayVisitedTimes(urlMap) {
-        urlTimes.innerHTML = '<h4>Visited URLs with Total Time Spent:</h4>';
+    function displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent) {
+        urlTimes.innerHTML = `<h4>Visited URLs with Total Time Spent:</h4>`;
         urlMap.forEach((totalSeconds, url) => {
             urlTimes.innerHTML += `<p>URL: ${url}<br>Total Time Spent: ${Math.round(totalSeconds)} seconds</p>`;
         });
+        urlTimes.innerHTML += `<p>Good Time Spent: ${Math.round(goodTimeSpent)} seconds</p>`;
+        urlTimes.innerHTML += `<p>Bad Time Spent: ${Math.round(badTimeSpent)} seconds</p>`;
     }
 
     updateTabInfo();
