@@ -4,6 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const goodTimeSpentDisplay = document.getElementById('goodTimeSpent');
     const badTimeSpentDisplay = document.getElementById('badTimeSpent');
     const urlTimes = document.getElementById('urlTimes');
+    const displayTimes = document.getElementById('displayTimes');
 
     const goodUrls = ['www.linkedin.com', 'www.tradingview.com']; // Array of good URLs
     const badUrls = ['www.instagram.com', 'www.youtube.com']; // Array of bad URLs
@@ -74,8 +75,8 @@ document.addEventListener('DOMContentLoaded', function() {
         urlMap.forEach((totalSeconds, url) => {
             urlTimes.innerHTML += `<p>URL: ${url}<br>Total Time Spent: ${Math.round(totalSeconds)} seconds</p>`;
         });
-        urlTimes.innerHTML += `<p>Good Time Spent: ${Math.round(goodTimeSpent)} seconds</p>`;
-        urlTimes.innerHTML += `<p>Bad Time Spent: ${Math.round(badTimeSpent)} seconds</p>`;
+        displayTimes.innerHTML += `<p>Good Time Spent: ${Math.round(goodTimeSpent)} seconds</p>`;
+        displayTimes.innerHTML += `<p>Bad Time Spent: ${Math.round(badTimeSpent)} seconds</p>`;
 
         goodTimeSpentDisplay.textContent = `${Math.round(goodTimeSpent)} seconds`;
         badTimeSpentDisplay.textContent = `${Math.round(badTimeSpent)} seconds`;
