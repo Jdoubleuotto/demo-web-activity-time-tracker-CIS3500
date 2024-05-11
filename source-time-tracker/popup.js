@@ -79,6 +79,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         goodTimeSpentDisplay.textContent = `${Math.round(goodTimeSpent)} seconds`;
         badTimeSpentDisplay.textContent = `${Math.round(badTimeSpent)} seconds`;
+        console.log({Math.round(goodTimeSpent)} seconds);
     }
 
     updateTabInfo();
