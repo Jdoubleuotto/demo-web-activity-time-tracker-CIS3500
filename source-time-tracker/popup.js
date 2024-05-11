@@ -70,10 +70,10 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     function displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent) {
-        // urlTimes.innerHTML = '<h4>Visited URLs with Total Time Spent:</h4>';
-        // urlMap.forEach((totalSeconds, url) => {
-        //     urlTimes.innerHTML += `<p>URL: ${url}<br>Total Time Spent: ${Math.round(totalSeconds)} seconds</p>`;
-        // });
+        urlTimes.innerHTML = '<h4>Visited URLs with Total Time Spent:</h4>';
+        urlMap.forEach((totalSeconds, url) => {
+            urlTimes.innerHTML += `<p>URL: ${url}<br>Total Time Spent: ${Math.round(totalSeconds)} seconds</p>`;
+        });
         urlTimes.innerHTML += `<p>Good Time Spent: ${Math.round(goodTimeSpent)} seconds</p>`;
         urlTimes.innerHTML += `<p>Bad Time Spent: ${Math.round(badTimeSpent)} seconds</p>`;
 
