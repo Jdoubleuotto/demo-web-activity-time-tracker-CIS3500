@@ -1,11 +1,15 @@
 chrome.tabs.onCreated.addListener((tab) => {
-  if (tab.url.startsWith("http")) {
-    addUrlToStorage(tab.url);
-  }
+  // if (tab.url.startsWith("http")) {
+  //   addUrlToStorage(tab.url);
+  // }
+  addUrlToStorage(tab.url);
 });
 
 chrome.tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
-  if (changeInfo.url && tab.url.startsWith("http")) {
+  // if (changeInfo.url && tab.url.startsWith("http")) {
+  //   addUrlToStorage(tab.url);
+  // }
+  if (changeInfo.url)) {
     addUrlToStorage(tab.url);
   }
 });
