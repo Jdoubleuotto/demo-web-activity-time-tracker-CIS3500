@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const goodUrls = ['www.linkedin.com', 'www.tradingview.com'];
     const badUrls = ['www.instagram.com', 'www.youtube.com'];
 
-    function displayUrlTimesAndUpdateHealth() {
+    function updateTabInfo() {
         chrome.storage.local.get({visitedUrls: []}, function(result) {
             if (result.visitedUrls && result.visitedUrls.length > 0) {
                 console.log('Retrieved visited URLs:', result.visitedUrls);
