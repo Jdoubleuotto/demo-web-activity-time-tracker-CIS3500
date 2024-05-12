@@ -1,28 +1,33 @@
 document.addEventListener('DOMContentLoaded', function() {
     const infoDiv = document.getElementById('tabInfo');
-    const healthBar = document.getElementById('healthBar');
+    const healthBar = document.getElementById('currentHealth'); // Adjusted to target the child element
     const goodTimeSpentDisplay = document.getElementById('goodTimeSpent');
     const badTimeSpentDisplay = document.getElementById('badTimeSpent');
     const urlTimes = document.getElementById('urlTimes');
     const displayTimes = document.getElementById('displayTimes');
 
-    const goodUrls = ['www.linkedin.com', 'www.tradingview.com']; // Array of good URLs
-    const badUrls = ['www.instagram.com', 'www.youtube.com']; // Array of bad URLs
+    const goodUrls = ['www.linkedin.com', 'www.tradingview.com'];
+    const badUrls = ['www.instagram.com', 'www.youtube.com'];
 
-    function updateTabInfo() {
+    function fetchTabInfoAndUpdateStorage() {
         chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
             let currentTab = tabs[0];
             if (currentTab) {
-                let parsedUrl = new URL(currentTab.url).hostname; // Parse and get the hostname
+                let parsedUrl = new URL(currentTab.url).hostname;
                 infoDiv.textContent = `Title: ${currentTab.title}\nURL: ${parsedUrl}`;
 
                 chrome.storage.local.get({visitedUrls: []}, function(result) {
                     const visitedUrls = result.visitedUrls;
-                    visitedUrls.push({title: currentTab.title, url: parsedUrl, time: new Date().toISOString()});
+                    const newVisit = {title: currentTab.title, url: parsedUrl, time: new Date().toISOString()};
 
-                    chrome.storage.local.set({visitedUrls: visitedUrls}, function() {
-                        displayUrlTimesAndUpdateHealth(visitedUrls);
-                    });
+                    if (!visitedUrls.length || visitedUrls[visitedUrls.length - 1].url !== parsedUrl) {
+                        visitedUrls.push(newVisit);
+                        chrome.storage.local.set({visitedUrls}, function() {
+                            calculateTimeAndDisplay(visitedUrls);
+                        });
+                    } else {
+                        calculateTimeAndDisplay(visitedUrls);
+                    }
                 });
             } else {
                 infoDiv.textContent = 'No active tab found or URL is not trackable.';
@@ -30,61 +35,42 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     }
 
-    function displayUrlTimesAndUpdateHealth(visitedUrls) {
-        let totalSeconds = 0;
+    function calculateTimeAndDisplay(visitedUrls) {
         let goodTimeSpent = 0;
         let badTimeSpent = 0;
-        const urlMap = new Map();
-
-        visitedUrls.forEach((urlInfo, index) => {
-            if (!urlMap.has(urlInfo.url)) {
-                urlMap.set(urlInfo.url, 0);
-            }
-            if (index < visitedUrls.length - 1) {
-                const nextVisitTime = new Date(visitedUrls[index + 1].time);
-                const currentVisitTime = new Date(urlInfo.time);
-                const diffSeconds = (nextVisitTime - currentVisitTime) / 1000;
-                urlMap.set(urlInfo.url, urlMap.get(urlInfo.url) + diffSeconds);
-            }
-        });
-
-        urlMap.forEach((time, url) => {
-            totalSeconds += time;
-            if (goodUrls.includes(url)) {
-                goodTimeSpent += time;
-            } else if (badUrls.includes(url)) {
-                badTimeSpent += time;
+        visitedUrls.forEach((visit, index) => {
+            if (index > 0) {
+                let currentVisitTime = new Date(visit.time);
+                let previousVisitTime = new Date(visitedUrls[index - 1].time);
+                let timeDiff = (currentVisitTime - previousVisitTime) / 1000;
+                if (goodUrls.includes(visit.url)) {
+                    goodTimeSpent += timeDiff;
+                } else if (badUrls.includes(visit.url)) {
+                    badTimeSpent += timeDiff;
+                }
             }
         });
 
-        updateChromagotchiHealth(goodTimeSpent, badTimeSpent);
-        displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent);
+        updateHealth(goodTimeSpent, badTimeSpent);
+        displayVisitedTimes(visitedUrls, goodTimeSpent, badTimeSpent);
     }
 
-    function updateChromagotchiHealth(goodTimeSpent, badTimeSpent) {
+    function updateHealth(goodTime, badTime) {
         let baseHealth = 50;
-        let healthChange = Math.floor(goodTimeSpent / 100) - Math.floor(badTimeSpent / 100);
+        let healthChange = Math.floor(goodTime / 100) - Math.floor(badTime / 100);
         let currentHealth = Math.min(100, Math.max(0, baseHealth + healthChange));
-
         healthBar.style.width = `${currentHealth}%`;
         healthBar.textContent = `Health: ${Math.round(currentHealth)}%`;
     }
 
-    function displayVisitedTimes(urlMap, goodTimeSpent, badTimeSpent) {
+    function displayVisitedTimes(visitedUrls, goodTime, badTime) {
         urlTimes.innerHTML = '<h4>Visited URLs with Total Time Spent:</h4>';
-        urlMap.forEach((totalSeconds, url) => {
-            urlTimes.innerHTML += `<p>${url}<br>Total Time Spent: ${Math.round(totalSeconds)} seconds</p>`;
+        visitedUrls.forEach((visit) => {
+            urlTimes.innerHTML += `<p>${visit.url}<br>Total Time Spent: ${Math.round(visit.time)} seconds</p>`;
         });
-        urlTimes.innerHTML += `<p>Good Time Spent: ${Math.round(goodTimeSpent)} seconds</p>`;
-        urlTimes.innerHTML += `<p>Bad Time Spent: ${Math.round(badTimeSpent)} seconds</p>`;
-        
-        displayTimes.innerHTML = '<h4>Visited URLs with Total Time Spent:</h4>';
-        displayTimes.innerHTML += `<p>Good Time Spent: ${Math.round(goodTimeSpent)} seconds</p>`;
-        displayTimes.innerHTML += `<p>Bad Time Spent: ${Math.round(badTimeSpent)} seconds</p>`;
-
-        goodTimeSpentDisplay.textContent = `${Math.round(goodTimeSpent)} seconds`;
-        badTimeSpentDisplay.textContent = `${Math.round(badTimeSpent)} seconds`;
+        displayTimes.innerHTML = `<p>Good Time Spent: ${Math.round(goodTime)} seconds</p>`;
+        displayTimes.innerHTML += `<p>Bad Time Spent: ${Math.round(badTime)} seconds</p>`;
     }
 
-    updateTabInfo();
+    fetchTabInfoAndUpdateStorage();
 });
