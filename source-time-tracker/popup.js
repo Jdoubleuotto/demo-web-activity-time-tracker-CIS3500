@@ -9,15 +9,15 @@ document.addEventListener('DOMContentLoaded', function() {
     const badUrls = ['www.instagram.com', 'www.youtube.com'];
 
     function displayUrlTimesAndUpdateHealth() {
-    chrome.storage.local.get({visitedUrls: []}, function(result) {
-        if (result.visitedUrls && result.visitedUrls.length > 0) {
-            console.log('Retrieved visited URLs:', result.visitedUrls);
-            calculateAndDisplayTimes(result.visitedUrls);
-        } else {
-            console.log('No visited URLs found.');
-        }
-    });
-}
+        chrome.storage.local.get({visitedUrls: []}, function(result) {
+            if (result.visitedUrls && result.visitedUrls.length > 0) {
+                console.log('Retrieved visited URLs:', result.visitedUrls);
+                calculateAndDisplayTimes(result.visitedUrls);
+            } else {
+                console.log('No visited URLs found.');
+            }
+        });
+    }
 
     function calculateAndDisplayTimes(visitedUrls) {
         let totalSeconds = 0;
