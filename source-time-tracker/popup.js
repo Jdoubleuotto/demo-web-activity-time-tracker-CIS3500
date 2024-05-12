@@ -25,6 +25,10 @@ document.addEventListener('DOMContentLoaded', function() {
         let badTimeSpent = 0;
         const urlMap = new Map();
 
+        if (visitedUrls.length === 0) {
+            console.log('No URLs to process.');
+        }
+
         visitedUrls.forEach((urlInfo, index) => {
             if (!urlMap.has(urlInfo.url)) {
                 urlMap.set(urlInfo.url, 0);
