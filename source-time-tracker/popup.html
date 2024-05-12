@@ -52,52 +52,9 @@
   <h2>Good & Bad Time</h2>
   <div id="displayTimes">Loading time ...</div>
 
-  <h2>Usage Statistics</h2>
+  
+<h2>Usage Statistics</h2>
   <div id="urlTimes">Loading time differences...</div>
-  <script>
-    document.addEventListener('DOMContentLoaded', function() {
-      // Request the current active tab
-      chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
-        const currentTab = tabs[0];
-        if (currentTab) {
-          const infoDiv = document.getElementById('tabInfo');
-          infoDiv.textContent = `Title: ${currentTab.title} URL: ${currentTab.url}`;
-        }
-      });
-
-      // Retrieve data from storage set by background.js
-      chrome.storage.local.get(['visitedUrls'], function(result) {
-        const visitedUrls = result.visitedUrls || [];
-        let goodTime = 0, badTime = 0;
-        const goodUrls = ['www.linkedin.com', 'www.tradingview.com'];
-        const badUrls = ['www.instagram.com', 'www.youtube.com'];
-        let lastVisitTime = new Date();
-        let currentHealth = 0;
-
-        // Calculate time spent on good and bad URLs
-        visitedUrls.forEach((urlData, index) => {
-          let urlTime = new Date(urlData.time);
-          if (index > 0) {
-            let timeSpent = (urlTime - lastVisitTime) / 1000;
-            if (goodUrls.includes(urlData.url)) {
-              goodTime += timeSpent;
-            } else if (badUrls.includes(urlData.url)) {
-              badTime += timeSpent;
-            }
-          }
-          lastVisitTime = urlTime;
-        });
-
-        // Update health based on good and bad times
-        const healthBar = document.getElementById('currentHealth');
-        currentHealth = Math.max(0, Math.min(100, 50 + (goodTime / 60) - (badTime / 60)));
-        healthBar.style.width = `${currentHealth}%`;
-        healthBar.textContent = `Health: ${Math.round(currentHealth)}%`;
-
-        const displayTimes = document.getElementById('displayTimes');
-        displayTimes.textContent = `Good Time: ${Math.round(goodTime)} sec, Bad Time: ${Math.round(badTime)} sec`;
-      });
-    });
-  </script>
+  <script src="popup.js"></script>
 </body>
 </html>
